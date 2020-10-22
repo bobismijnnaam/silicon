@@ -16,6 +16,7 @@ import viper.silicon.common.collections.immutable.InsertionOrderedSet
 import viper.silicon.decider.RecordedPathConditions
 import viper.silicon.interfaces._
 import viper.silicon.resources.FieldID
+import viper.silicon.rules.consumer.createFailure
 import viper.silicon.state._
 import viper.silicon.state.terms._
 import viper.silicon.state.terms.perms.IsNonNegative
@@ -380,6 +381,29 @@ object executor extends ExecutionRules with Immutable {
           consume(s, a, pve, v)((s1, _, v1) => {
             val s2 = s1.copy(h = s.h, reserveHeaps = s.reserveHeaps)
             Q(s2, v1)})
+
+      case refute @ ast.Refute(e) =>
+        val pve = RefuteFailed(refute)
+
+        val s1 = s.copy(h = magicWandSupporter.getEvalHeap(s),
+          reserveHeaps = Nil,
+          exhaleExt = false)
+
+        executionFlowController.tryOrFail0(s1, v)((s2, v1, QS) => {
+          eval(s2, e, pve, v1)((s3, t, v2) => {
+            v2.decider.assert(t) {
+              case true =>
+                createFailure(pve dueTo AssertionFalse(e), v2, s3)
+              case false =>
+//                v2.decider.assume(t)
+                QS(s3, v2)
+            }})
+        })((s4, v4) => {
+          val s5 = s4.copy(h = s.h,
+            reserveHeaps = s.reserveHeaps,
+            exhaleExt = s.exhaleExt)
+          Q(s5, v4)
+        })
 
       // Calling hack407_R() results in Silicon efficiently havocking all instances of resource R.
       // See also Silicon issue #407.
