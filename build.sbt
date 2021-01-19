@@ -4,6 +4,8 @@
 //
 // Copyright (c) 2011-2019 ETH Zurich.
 
+ThisBuild / scalaVersion := "2.13.4"
+
 // Import general settings from Silver
 lazy val silver = project in file("silver")
 
