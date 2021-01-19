@@ -20,6 +20,7 @@ lazy val silicon = (project in file("."))
     name := "Silicon",
     organization := "viper",
     version := "1.1-SNAPSHOT",
+    scalaVersion := "2.13.4",
 
     // Compilation settings
     // Remove elidable method calls such as in SymbExLogger during compilation
