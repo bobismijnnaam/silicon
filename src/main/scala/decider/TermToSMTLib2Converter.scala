@@ -65,7 +65,7 @@ class TermToSMTLib2Converter
 
   protected def render(decl: Decl): Cont = decl match {
     case SortDecl(sort: Sort) =>
-      parens(text("declare-sort") <+> render(sort))
+      parens(text("declare-sort") <+> render(sort) <+> text("0"))
 
     case FunctionDecl(fun: Function) =>
       val idDoc = render(fun.id)

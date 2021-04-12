@@ -13,6 +13,7 @@ import viper.silver.components.StatefulComponent
 import viper.silver.verifier.DependencyNotFoundError
 import viper.silicon.{Silicon, SymbExLogger}
 import viper.silicon.common.collections.immutable.InsertionOrderedSet
+import viper.silicon.common.config
 import viper.silicon.interfaces._
 import viper.silicon.interfaces.decider.{Prover, Unsat}
 import viper.silicon.state._
@@ -104,7 +105,8 @@ trait DefaultDeciderProvider extends VerifierComponent { this: Verifier =>
       z3 = new Z3ProverStdIO(uniqueId, termConverter, identifierFactory, reporter)
       z3.start() /* Cannot query Z3 version otherwise */
 
-      val z3Version = z3.z3Version()
+//      val z3Version = z3.z3Version()
+      val z3Version = config.Version("turned-off-for-now")
       // One can pass some options. This allows to check whether they have been received.
 
       val msg = s"Using Z3 $z3Version located at ${z3.z3Path}"

@@ -88,7 +88,8 @@ class Z3ProverStdIO(uniqueId: String,
         args.split(' ').map(_.trim)
     }
 
-    val builder = new ProcessBuilder(z3Path.toFile.getPath +: "-smt2" +: "-in" +: userProvidedZ3Args :_*)
+//    val builder = new ProcessBuilder(z3Path.toFile.getPath +: "-smt2" +: "-in" +: userProvidedZ3Args :_*)
+    val builder = new ProcessBuilder(Seq(z3Path.toFile.getPath, "--lang", "smt2.6", "--incremental", "--produce-models", "--no-strict-parsing") :_*)
     builder.redirectErrorStream(true)
 
     val process = builder.start()
@@ -361,15 +362,17 @@ class Z3ProverStdIO(uniqueId: String,
   private def readSuccess(): Unit = {
     val answer = readLine()
 
-    if (answer != "success")
-      throw Z3InteractionFailed(uniqueId, s"Unexpected output of Z3. Expected 'success' but found: $answer")
+    if (answer != "success") {
+      println(s"Expected success, got: $answer")
+//      throw Z3InteractionFailed(uniqueId, s"Unexpected output of Z3. Expected 'success' but found: $answer")
+    }
   }
 
   private def readUnsat(): Boolean = readLine() match {
     case "unsat" => true
     case "sat" => false
     case "unknown" => false
-
+    case "success" => readUnsat()
     case result =>
       throw Z3InteractionFailed(uniqueId, s"Unexpected output of Z3 while trying to refute an assertion: $result")
   }
@@ -413,6 +416,7 @@ class Z3ProverStdIO(uniqueId: String,
       repeat = warning
     }
 
+    println(s"[From prover] $result")
     result
   }
 
@@ -425,6 +429,7 @@ class Z3ProverStdIO(uniqueId: String,
   private def writeLine(out: String) = {
     logToFile(out)
     output.println(out)
+    println(s"[To prover] $out")
   }
 
   override def getLastModel(): String = lastModel

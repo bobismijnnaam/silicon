@@ -286,7 +286,7 @@ class DefaultMasterVerifier(config: Config, override val reporter: PluginAwareRe
 
   private def emitStaticPreamble(sink: ProverLike): Unit = {
     sink.comment("\n; /z3config.smt2")
-    preambleReader.emitPreamble("/z3config.smt2", sink)
+    preambleReader.emitPreamble("/cvc4config.smt2", sink)
 
     if (config.z3RandomizeSeeds()) {
       sink.comment(s"\n; Randomise seeds [--${config.z3RandomizeSeeds.name}]")
