@@ -1,0 +1,728 @@
+// Generated on 2021-04-12 at 11:15:17
+domain TYPE {
+  
+  unique function class_Node(): TYPE
+  
+  unique function class_java_DOT_lang_DOT_Object(): TYPE
+  
+  unique function class_C(): TYPE
+  
+  unique function class_EncodedGlobalVariables(): TYPE
+  
+  function directSuperclass(t: TYPE): TYPE
+  
+  function type_of(val: Ref): TYPE
+  
+  axiom Node_directSuperclass {
+    directSuperclass(class_Node()) == class_java_DOT_lang_DOT_Object()
+  }
+  
+  axiom C_directSuperclass {
+    directSuperclass(class_C()) == class_java_DOT_lang_DOT_Object()
+  }
+  
+  axiom EncodedGlobalVariables_directSuperclass {
+    directSuperclass(class_EncodedGlobalVariables()) == class_java_DOT_lang_DOT_Object()
+  }
+}
+
+domain frac {
+  
+  function frac_val(a: frac): Perm
+  
+  axiom frac_eq {
+    (forall a: frac, b: frac :: { frac_val(a),frac_val(b) } (frac_val(a) == frac_val(b)) == (a == b))
+  }
+  
+  axiom frac_bound {
+    (forall a: frac :: { frac_val(a) } 0 / 1 < frac_val(a) && frac_val(a) <= 1 / 1)
+  }
+}
+
+domain zfrac {
+  
+  function zfrac_val(a: zfrac): Perm
+  
+  axiom zfrac_eq {
+    (forall a: zfrac, b: zfrac :: { zfrac_val(a),zfrac_val(b) } (zfrac_val(a) == zfrac_val(b)) == (a == b))
+  }
+  
+  axiom zfrac_bound {
+    (forall a: zfrac :: { zfrac_val(a) } 0 / 1 <= zfrac_val(a) && zfrac_val(a) <= 1 / 1)
+  }
+}
+
+//  a field 
+field Node_v: Int
+
+//  a field 
+field Node_inMessage: Int
+
+//  a field 
+field Node_outMessage: Int
+
+//  a field 
+field Node_n: Int
+
+//  a field 
+field Node_total: Int
+
+function C_mod_Integer_Integer(i: Int, n: Int): Int
+  requires 0 < n
+  ensures 0 <= result && result < n
+  ensures 0 <= i && i < n ==> result == i
+{
+  (i % n + n) % n
+}
+
+function C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals: Ref, nodes: Seq[Ref], i: Int, rounds: Int): Int
+  requires (forall j: Int :: { nodes[j] } 0 <= j && j < |nodes| ==> acc(nodes[j].Node_v, wildcard))
+  requires 0 <= i && i < |nodes|
+  requires 0 <= rounds && rounds <= |nodes|
+{
+  (rounds == 0 ? nodes[i].Node_v : (let nextI == ((i == 0 ? |nodes| - 1 : i - 1)) in (let nextTotal == (C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, nextI, rounds - 1)) in nextTotal + nodes[i].Node_v)))
+}
+
+function C_next_Integer_Integer(i: Int, size: Int): Int
+  requires 0 < size
+  ensures 0 <= result && result < size
+{
+  C_mod_Integer_Integer(i - 1, size)
+}
+
+function C_previous_Integer_Integer(i: Int, size: Int): Int
+  requires 0 < size
+  ensures 0 <= result && result < size
+{
+  C_mod_Integer_Integer(i + 1, size)
+}
+
+function C_pick_Integer(max: Int): Int
+  ensures 0 <= result && result < max
+
+
+function instanceof_TYPE_TYPE(t: TYPE, u: TYPE): Bool
+  ensures result == (t == u || directSuperclass(t) == u)
+
+
+function new_frac(x: Perm): frac
+  requires 0 / 1 < x && x <= 1 / 1
+  ensures frac_val(result) == x
+
+
+function new_zfrac(x: Perm): zfrac
+  requires 0 / 1 <= x && x <= 1 / 1
+  ensures zfrac_val(result) == x
+
+
+method Node___contract_unsatisfiable__Node_EncodedGlobalVariables_Integer(diz: Ref, globals: Ref, myValue: Int)
+  requires diz != null
+{
+  inhale true && true
+  // assert
+  assert false
+  inhale false
+}
+
+method Node_Node_EncodedGlobalVariables_Integer(globals: Ref, myValue: Int) returns (sys__result: Ref)
+  ensures sys__result != null
+  ensures type_of(sys__result) == class_Node()
+  ensures acc(sys__result.Node_v, 1 / 2)
+  ensures acc(sys__result.Node_outMessage, write)
+  ensures acc(sys__result.Node_inMessage, write)
+  ensures acc(sys__result.Node_n, write)
+  ensures acc(sys__result.Node_total, write)
+  ensures sys__result.Node_v == myValue
+  ensures sys__result.Node_outMessage == sys__result.Node_v
+  ensures sys__result.Node_inMessage == -1
+  ensures sys__result.Node_n == 0
+  ensures sys__result.Node_total == sys__result.Node_v
+{
+  var __flatten_3__4: Int
+  var __flatten_2__3: Int
+  var __flatten_1__2: Int
+  var diz__1: Ref
+  diz__1 := new(Node_v, Node_inMessage, Node_outMessage, Node_n, Node_total)
+  inhale type_of(diz__1) == class_Node()
+  diz__1.Node_v := myValue
+  __flatten_1__2 := diz__1.Node_v
+  diz__1.Node_outMessage := __flatten_1__2
+  __flatten_2__3 := -1
+  diz__1.Node_inMessage := __flatten_2__3
+  diz__1.Node_n := 0
+  __flatten_3__4 := diz__1.Node_v
+  diz__1.Node_total := __flatten_3__4
+  sys__result := diz__1
+  // assert
+  assert sys__result != null && type_of(sys__result) == class_Node() && acc(sys__result.Node_v, 1 / 2) && acc(sys__result.Node_outMessage, write) && acc(sys__result.Node_inMessage, write) && acc(sys__result.Node_n, write) && acc(sys__result.Node_total, write) && sys__result.Node_v == myValue && sys__result.Node_outMessage == sys__result.Node_v && sys__result.Node_inMessage == -1 && sys__result.Node_n == 0 && sys__result.Node_total == sys__result.Node_v
+  inhale false
+}
+
+method Node___contract_unsatisfiable__processMessage_EncodedGlobalVariables_Fraction(diz: Ref, globals: Ref, P: frac) returns (sys__result: Bool)
+  requires diz != null
+{
+  inhale true && (none < frac_val(P) && frac_val(P) < write && acc(diz.Node_v, frac_val(P)) && acc(diz.Node_outMessage, write) && acc(diz.Node_inMessage, 1 / 2) && acc(diz.Node_n, write) && acc(diz.Node_total, write))
+  // assert
+  assert false
+  inhale false
+}
+
+method Node_processMessage_EncodedGlobalVariables_Fraction(diz: Ref, globals: Ref, P: frac) returns (sys__result: Bool)
+  requires diz != null
+  requires none < frac_val(P) && frac_val(P) < write
+  requires acc(diz.Node_v, frac_val(P))
+  requires acc(diz.Node_outMessage, write)
+  requires acc(diz.Node_inMessage, 1 / 2)
+  requires acc(diz.Node_n, write)
+  requires acc(diz.Node_total, write)
+  ensures none < frac_val(P) && frac_val(P) < write
+  ensures acc(diz.Node_v, frac_val(P))
+  ensures acc(diz.Node_outMessage, write)
+  ensures acc(diz.Node_inMessage, 1 / 2)
+  ensures acc(diz.Node_n, write)
+  ensures acc(diz.Node_total, write)
+  ensures diz.Node_n == old(diz.Node_n) + 1
+  ensures diz.Node_v == old(diz.Node_v)
+  ensures diz.Node_inMessage == old(diz.Node_inMessage)
+  ensures diz.Node_total == diz.Node_inMessage + diz.Node_v
+  ensures diz.Node_outMessage == diz.Node_total
+{
+  var __flatten_4__5: Int
+  var __flatten_5__6: Int
+  var __flatten_6__7: Int
+  __flatten_4__5 := diz.Node_inMessage + diz.Node_v
+  diz.Node_total := __flatten_4__5
+  __flatten_5__6 := diz.Node_total
+  diz.Node_outMessage := __flatten_5__6
+  __flatten_6__7 := diz.Node_n
+  diz.Node_n := diz.Node_n + 1
+}
+
+method C___contract_unsatisfiable__lemmaGetTotalHead_EncodedGlobalVariables_Sequence$Node$_Integer_Integer_Fraction(diz: Ref, globals: Ref, nodes: Seq[Ref], i: Int, rounds: Int, P: frac)
+  requires diz != null
+{
+  inhale true && (none < frac_val(P) && frac_val(P) < write && (0 <= i && i < |nodes|) && (1 <= rounds && rounds <= |nodes|) && (forall j__8: Int :: { nodes[j__8].Node_v } 0 <= j__8 && j__8 < |nodes| ==> acc(nodes[j__8].Node_v, frac_val(P))))
+  // assert
+  assert false
+  inhale false
+}
+
+method C_lemmaGetTotalHead_EncodedGlobalVariables_Sequence$Node$_Integer_Integer_Fraction(diz: Ref, globals: Ref, nodes: Seq[Ref], i: Int, rounds: Int, P: frac)
+  requires diz != null
+  requires none < frac_val(P) && frac_val(P) < write
+  requires 0 <= i && i < |nodes|
+  requires 1 <= rounds && rounds <= |nodes|
+  requires (forall j: Int :: { nodes[j].Node_v } 0 <= j && j < |nodes| ==> acc(nodes[j].Node_v, frac_val(P)))
+  ensures (forall j: Int :: { nodes[j].Node_v } 0 <= j && j < |nodes| ==> acc(nodes[j].Node_v, frac_val(P)))
+  ensures C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, i, rounds) == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, C_next_Integer_Integer(i, |nodes|), rounds - 1) + nodes[i].Node_v
+{
+  
+}
+
+method C___contract_unsatisfiable__lemmaMod2_EncodedGlobalVariables_Integer_Integer(diz: Ref, globals: Ref, i: Int, n: Int)
+  requires diz != null
+{
+  inhale true && 0 < n
+  // assert
+  assert false
+  inhale false
+}
+
+method C_lemmaMod2_EncodedGlobalVariables_Integer_Integer(diz: Ref, globals: Ref, i: Int, n: Int)
+  requires diz != null
+  requires 0 < n
+  ensures C_mod_Integer_Integer(C_mod_Integer_Integer(i, n), n) == C_mod_Integer_Integer(i, n)
+{
+  
+}
+
+method C___contract_unsatisfiable__lemmaMod3_EncodedGlobalVariables_Integer_Integer_Integer(diz: Ref, globals: Ref, i: Int, j: Int, n: Int)
+  requires diz != null
+{
+  inhale true && 0 < n
+  // assert
+  assert false
+  inhale false
+}
+
+method C_lemmaMod3_EncodedGlobalVariables_Integer_Integer_Integer(diz: Ref, globals: Ref, i: Int, j: Int, n: Int)
+  requires diz != null
+  requires 0 < n
+  ensures C_mod_Integer_Integer(C_mod_Integer_Integer(i, n) + j, n) == C_mod_Integer_Integer(i + j, n)
+{
+  inhale false
+}
+
+method C___contract_unsatisfiable__lemmaMod1_EncodedGlobalVariables_Integer_Integer_Integer(diz: Ref, globals: Ref, i: Int, j: Int, n: Int)
+  requires diz != null
+{
+  inhale true && (0 < n && i % n == j % n)
+  // assert
+  assert false
+  inhale false
+}
+
+method C_lemmaMod1_EncodedGlobalVariables_Integer_Integer_Integer(diz: Ref, globals: Ref, i: Int, j: Int, n: Int)
+  requires diz != null
+  requires 0 < n
+  requires i % n == j % n
+  ensures (i + 1) % n == (j + 1) % n
+{
+  inhale false
+}
+
+method C___contract_unsatisfiable__lemmaMod3_1_EncodedGlobalVariables_Integer_Integer_Integer(diz: Ref, globals: Ref, i: Int, j: Int, n: Int)
+  requires diz != null
+{
+  inhale true && 0 < n
+  // assert
+  assert false
+  inhale false
+}
+
+method C_lemmaMod3_1_EncodedGlobalVariables_Integer_Integer_Integer(diz: Ref, globals: Ref, i: Int, j: Int, n: Int)
+  requires diz != null
+  requires 0 < n
+  ensures (i % n + j) % n == (i + j) % n
+{
+  inhale false
+}
+
+method C___contract_unsatisfiable__lemmaMod4_EncodedGlobalVariables_Integer_Integer_Integer(diz: Ref, globals: Ref, i: Int, j: Int, n: Int)
+  requires diz != null
+{
+  inhale true && 0 < n
+  // assert
+  assert false
+  inhale false
+}
+
+method C_lemmaMod4_EncodedGlobalVariables_Integer_Integer_Integer(diz: Ref, globals: Ref, i: Int, j: Int, n: Int)
+  requires diz != null
+  requires 0 < n
+  ensures C_mod_Integer_Integer(C_mod_Integer_Integer(i, n) + j, n) == C_mod_Integer_Integer(C_mod_Integer_Integer(i + j, n), n)
+{
+  C_lemmaMod3_EncodedGlobalVariables_Integer_Integer_Integer(diz, globals, i, j, n)
+  C_lemmaMod2_EncodedGlobalVariables_Integer_Integer(diz, globals, i + j, n)
+}
+
+method C___contract_unsatisfiable__lemmaNextShiftSubtraction_EncodedGlobalVariables_Integer_Integer_Integer(diz: Ref, globals: Ref, i: Int, r: Int, n: Int)
+  requires diz != null
+{
+  inhale true && (0 <= i && 0 <= r && 0 < n)
+  // assert
+  assert false
+  inhale false
+}
+
+method C_lemmaNextShiftSubtraction_EncodedGlobalVariables_Integer_Integer_Integer(diz: Ref, globals: Ref, i: Int, r: Int, n: Int)
+  requires diz != null
+  requires 0 <= i
+  requires 0 <= r
+  requires 0 < n
+  ensures C_mod_Integer_Integer(C_next_Integer_Integer(i, n) - (r - 1), n) == C_mod_Integer_Integer(i - r, n)
+{
+  // assert
+  assert C_mod_Integer_Integer(C_next_Integer_Integer(i, n) - (r - 1), n) == C_mod_Integer_Integer(C_mod_Integer_Integer(i - 1, n) - (r - 1), n)
+  // assert
+  assert C_mod_Integer_Integer(C_mod_Integer_Integer(i - 1, n) - (r - 1), n) == C_mod_Integer_Integer(C_mod_Integer_Integer(i - 1, n) - r + 1, n)
+  C_lemmaMod4_EncodedGlobalVariables_Integer_Integer_Integer(diz, globals, i - 1, -r + 1, n)
+  // assert
+  assert C_mod_Integer_Integer(C_mod_Integer_Integer(i - 1, n) + (-r + 1), n) == C_mod_Integer_Integer(C_mod_Integer_Integer(i - 1 + (-r + 1), n), n)
+  // assert
+  assert C_mod_Integer_Integer(C_mod_Integer_Integer(i - 1 + (-r + 1), n), n) == C_mod_Integer_Integer(C_mod_Integer_Integer(i - r, n), n)
+  C_lemmaMod2_EncodedGlobalVariables_Integer_Integer(diz, globals, i - r, n)
+  // assert
+  assert C_mod_Integer_Integer(C_mod_Integer_Integer(i - r, n), n) == C_mod_Integer_Integer(i - r, n)
+}
+
+method C___contract_unsatisfiable__lemmaGetTotalLast_EncodedGlobalVariables_Sequence$Node$_Integer_Integer_Fraction(diz: Ref, globals: Ref, nodes: Seq[Ref], i: Int, rounds: Int, P: frac)
+  requires diz != null
+{
+  inhale true && (none < frac_val(P) && frac_val(P) < write && (0 <= i && i < |nodes|) && (1 <= rounds && rounds <= |nodes|) && (forall j__9: Int :: { nodes[j__9].Node_v } 0 <= j__9 && j__9 < |nodes| ==> acc(nodes[j__9].Node_v, frac_val(P))))
+  // assert
+  assert false
+  inhale false
+}
+
+method C_lemmaGetTotalLast_EncodedGlobalVariables_Sequence$Node$_Integer_Integer_Fraction(diz: Ref, globals: Ref, nodes: Seq[Ref], i: Int, rounds: Int, P: frac)
+  requires diz != null
+  requires none < frac_val(P) && frac_val(P) < write
+  requires 0 <= i && i < |nodes|
+  requires 1 <= rounds && rounds <= |nodes|
+  requires (forall j: Int :: { nodes[j].Node_v } 0 <= j && j < |nodes| ==> acc(nodes[j].Node_v, frac_val(P)))
+  ensures (forall j: Int :: { nodes[j].Node_v } 0 <= j && j < |nodes| ==> acc(nodes[j].Node_v, frac_val(P)))
+  ensures C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, i, rounds) == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, i, rounds - 1) + nodes[C_mod_Integer_Integer(i - rounds, |nodes|)].Node_v
+{
+  var __flatten_11__10: Int
+  inhale false
+  if (rounds == 1) {
+    // assert
+    assert C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, i, rounds) == nodes[i].Node_v + C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, C_next_Integer_Integer(i, |nodes|), rounds - 1)
+  } else {
+    __flatten_11__10 := C_next_Integer_Integer(i, |nodes|)
+    C_lemmaGetTotalLast_EncodedGlobalVariables_Sequence$Node$_Integer_Integer_Fraction(diz, globals, nodes, __flatten_11__10, rounds - 1, new_frac(frac_val(P) / 2))
+    // assert
+    assert C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, C_next_Integer_Integer(i, |nodes|), rounds - 1) == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, C_next_Integer_Integer(i, |nodes|), rounds - 1 - 1) + nodes[C_mod_Integer_Integer(C_next_Integer_Integer(i, |nodes|) - (rounds - 1), |nodes|)].Node_v
+    // assert
+    assert C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, C_next_Integer_Integer(i, |nodes|), rounds - 1) + nodes[i].Node_v == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, C_next_Integer_Integer(i, |nodes|), rounds - 1 - 1) + nodes[i].Node_v + nodes[C_mod_Integer_Integer(C_next_Integer_Integer(i, |nodes|) - (rounds - 1), |nodes|)].Node_v
+    C_lemmaGetTotalHead_EncodedGlobalVariables_Sequence$Node$_Integer_Integer_Fraction(diz, globals, nodes, i, rounds, new_frac(frac_val(P) / 2))
+    // assert
+    assert C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, C_next_Integer_Integer(i, |nodes|), rounds - 1) + nodes[i].Node_v == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, i, rounds)
+    // assert
+    assert C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, C_next_Integer_Integer(i, |nodes|), rounds - 1) + nodes[i].Node_v == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, C_next_Integer_Integer(i, |nodes|), rounds - 1 - 1) + nodes[i].Node_v + nodes[C_mod_Integer_Integer(C_next_Integer_Integer(i, |nodes|) - (rounds - 1), |nodes|)].Node_v
+    // assert
+    assert C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, i, rounds) == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, C_next_Integer_Integer(i, |nodes|), rounds - 1 - 1) + nodes[i].Node_v + nodes[C_mod_Integer_Integer(C_next_Integer_Integer(i, |nodes|) - (rounds - 1), |nodes|)].Node_v
+    C_lemmaGetTotalHead_EncodedGlobalVariables_Sequence$Node$_Integer_Integer_Fraction(diz, globals, nodes, i, rounds - 1, new_frac(frac_val(P) / 2))
+    // assert
+    assert C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, i, rounds) == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, i, rounds - 1) + nodes[C_mod_Integer_Integer(C_next_Integer_Integer(i, |nodes|) - (rounds - 1), |nodes|)].Node_v
+    C_lemmaNextShiftSubtraction_EncodedGlobalVariables_Integer_Integer_Integer(diz, globals, i, rounds, |nodes|)
+  }
+}
+
+method C_lemmaModShiftKInwards_EncodedGlobalVariables_Integer_Integer_Integer(diz: Ref, globals: Ref, i: Int, k: Int, n: Int)
+  requires diz != null
+  requires 0 < n
+  ensures (i % n + k) % n == (i + k) % n % n
+{
+  inhale false
+}
+
+method C___contract_unsatisfiable__lemmaTotalAB_EncodedGlobalVariables_Sequence$Node$_Integer_Integer_Fraction(diz: Ref, globals: Ref, nodes: Seq[Ref], a: Int, b: Int, P: frac)
+  requires diz != null
+{
+  inhale true && (none < frac_val(P) && frac_val(P) < write && 2 < |nodes| && (0 <= a && a < |nodes|) && (0 <= b && b < |nodes|) && (forall i__11: Int :: { nodes[i__11].Node_total } 0 <= i__11 && i__11 < |nodes| ==> acc(nodes[i__11].Node_total, frac_val(P))) && (forall i__12: Int :: { nodes[i__12].Node_v } 0 <= i__12 && i__12 < |nodes| ==> acc(nodes[i__12].Node_v, frac_val(P))) && nodes[a].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, a, |nodes| - 1) && nodes[b].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, b, |nodes| - 1) && C_mod_Integer_Integer(a + 1, |nodes|) == b)
+  // assert
+  assert false
+  inhale false
+}
+
+method C_lemmaTotalAB_EncodedGlobalVariables_Sequence$Node$_Integer_Integer_Fraction(diz: Ref, globals: Ref, nodes: Seq[Ref], a: Int, b: Int, P: frac)
+  requires diz != null
+  requires none < frac_val(P) && frac_val(P) < write
+  requires 2 < |nodes|
+  requires 0 <= a && a < |nodes|
+  requires 0 <= b && b < |nodes|
+  requires (forall i: Int :: { nodes[i].Node_total } 0 <= i && i < |nodes| ==> acc(nodes[i].Node_total, frac_val(P)))
+  requires (forall i: Int :: { nodes[i].Node_v } 0 <= i && i < |nodes| ==> acc(nodes[i].Node_v, frac_val(P)))
+  requires nodes[a].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, a, |nodes| - 1)
+  requires nodes[b].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, b, |nodes| - 1)
+  requires C_mod_Integer_Integer(a + 1, |nodes|) == b
+  ensures none < frac_val(P) && frac_val(P) < write
+  ensures 2 < |nodes|
+  ensures 0 <= a && a < |nodes|
+  ensures 0 <= b && b < |nodes|
+  ensures (forall i: Int :: { nodes[i].Node_total } 0 <= i && i < |nodes| ==> acc(nodes[i].Node_total, frac_val(P)))
+  ensures (forall i: Int :: { nodes[i].Node_v } 0 <= i && i < |nodes| ==> acc(nodes[i].Node_v, frac_val(P)))
+  ensures nodes[a].Node_total == nodes[b].Node_total
+{
+  var __flatten_17__13: Int
+  var __flatten_21__18: Int
+  inhale false
+  // assert
+  assert nodes[a].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, a, |nodes| - 1)
+  C_lemmaGetTotalHead_EncodedGlobalVariables_Sequence$Node$_Integer_Integer_Fraction(diz, globals, nodes, a, |nodes| - 1, new_frac(frac_val(P) / 2))
+  // assert
+  assert nodes[a].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, C_next_Integer_Integer(a, |nodes|), |nodes| - 1 - 1) + nodes[a].Node_v
+  // assert
+  assert nodes[a].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, C_next_Integer_Integer(a, |nodes|), |nodes| - 1 - 1) + nodes[a].Node_v
+  __flatten_17__13 := C_next_Integer_Integer(a, |nodes|)
+  C_lemmaGetTotalLast_EncodedGlobalVariables_Sequence$Node$_Integer_Integer_Fraction(diz, globals, nodes, __flatten_17__13, |nodes| - 1 - 1, new_frac(frac_val(P) / 2))
+  // assert
+  assert C_mod_Integer_Integer(C_next_Integer_Integer(a, |nodes|) - (|nodes| - 1 - 1), |nodes|) == C_mod_Integer_Integer(C_next_Integer_Integer(a, |nodes|) - |nodes| + 1 + 1, |nodes|)
+  inhale (forall i__14: Int, n__15: Int :: true && 0 < n__15 ==> i__14 % n__15 == (i__14 + n__15) % n__15)
+  // assert
+  assert C_mod_Integer_Integer(C_next_Integer_Integer(a, |nodes|) - |nodes| + 1 + 1, |nodes|) == C_mod_Integer_Integer(C_next_Integer_Integer(a, |nodes|) + 1 + 1, |nodes|)
+  // assert
+  assert C_mod_Integer_Integer(C_next_Integer_Integer(a, |nodes|) + 1 + 1, |nodes|) == C_mod_Integer_Integer(C_mod_Integer_Integer(a - 1, |nodes|) + 1 + 1, |nodes|)
+  // assert
+  assert C_mod_Integer_Integer(C_next_Integer_Integer(a, |nodes|) + 1 + 1, |nodes|) == C_mod_Integer_Integer(C_mod_Integer_Integer(a - 1, |nodes|) + 1 + 1, |nodes|)
+  // assert
+  assert C_mod_Integer_Integer(C_mod_Integer_Integer(a - 1, |nodes|) + 1 + 1, |nodes|) == C_mod_Integer_Integer((a - 1) % |nodes| + 2, |nodes|)
+  C_lemmaModShiftKInwards_EncodedGlobalVariables_Integer_Integer_Integer(diz, globals, a - 1, 2, |nodes|)
+  // assert
+  assert C_mod_Integer_Integer((a - 1) % |nodes| + 2, |nodes|) == C_mod_Integer_Integer((a + 1) % |nodes|, |nodes|)
+  inhale (forall i__16: Int, n__17: Int :: true && 0 < n__17 ==> i__16 % n__17 == i__16 % n__17 % n__17)
+  // assert
+  assert C_mod_Integer_Integer(C_next_Integer_Integer(a, |nodes|) - (|nodes| - 1 - 1), |nodes|) == b
+  // assert
+  assert C_mod_Integer_Integer(C_next_Integer_Integer(a, |nodes|) - (|nodes| - 1 - 1), |nodes|) == b
+  // assert
+  assert nodes[a].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, C_next_Integer_Integer(a, |nodes|), |nodes| - 1 - 1 - 1) + nodes[C_mod_Integer_Integer(C_next_Integer_Integer(a, |nodes|) - (|nodes| - 1 - 1), |nodes|)].Node_v + nodes[a].Node_v
+  // assert
+  assert nodes[a].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, C_next_Integer_Integer(a, |nodes|), |nodes| - 1 - 1 - 1) + nodes[b].Node_v + nodes[a].Node_v
+  // assert
+  assert nodes[b].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, b, |nodes| - 1)
+  C_lemmaGetTotalHead_EncodedGlobalVariables_Sequence$Node$_Integer_Integer_Fraction(diz, globals, nodes, b, |nodes| - 1, new_frac(frac_val(P) / 2))
+  // assert
+  assert nodes[b].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, C_next_Integer_Integer(b, |nodes|), |nodes| - 1 - 1) + nodes[b].Node_v
+  __flatten_21__18 := C_next_Integer_Integer(b, |nodes|)
+  C_lemmaGetTotalHead_EncodedGlobalVariables_Sequence$Node$_Integer_Integer_Fraction(diz, globals, nodes, __flatten_21__18, |nodes| - 1 - 1, new_frac(frac_val(P) / 2))
+  // assert
+  assert C_next_Integer_Integer(b, |nodes|) == C_mod_Integer_Integer(b - 1, |nodes|)
+  // assert
+  assert C_mod_Integer_Integer(b - 1, |nodes|) == C_mod_Integer_Integer(C_mod_Integer_Integer(a + 1, |nodes|) - 1, |nodes|)
+  // assert
+  assert C_mod_Integer_Integer(C_mod_Integer_Integer(a + 1, |nodes|) - 1, |nodes|) == C_mod_Integer_Integer(C_mod_Integer_Integer(a + 1, |nodes|) + -1, |nodes|)
+  C_lemmaModShiftKInwards_EncodedGlobalVariables_Integer_Integer_Integer(diz, globals, a + 1, -1, |nodes|)
+  // assert
+  assert C_mod_Integer_Integer(C_mod_Integer_Integer(a + 1, |nodes|) - 1, |nodes|) == C_mod_Integer_Integer(C_mod_Integer_Integer(a + 1 - 1, |nodes|), |nodes|)
+  // assert
+  assert C_mod_Integer_Integer(C_mod_Integer_Integer(a, |nodes|), |nodes|) == a
+  // assert
+  assert C_next_Integer_Integer(b, |nodes|) == a
+  // assert
+  assert nodes[b].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, C_next_Integer_Integer(C_next_Integer_Integer(b, |nodes|), |nodes|), |nodes| - 1 - 1 - 1) + nodes[a].Node_v + nodes[b].Node_v
+  // assert
+  assert false
+}
+
+method C___contract_unsatisfiable__lemmaTotal2_EncodedGlobalVariables_Sequence$Node$_Fraction(diz: Ref, globals: Ref, nodes: Seq[Ref], P: frac)
+  requires diz != null
+{
+  inhale (forall i__19: Int :: { nodes[i__19].Node_total } 0 <= i__19 && i__19 < |nodes| ==> acc(nodes[i__19].Node_total, frac_val(P))) && (forall i__20: Int :: { nodes[i__20].Node_v } 0 <= i__20 && i__20 < |nodes| ==> acc(nodes[i__20].Node_v, frac_val(P))) && (forall i__21: Int :: { nodes[i__21].Node_total } 0 <= i__21 && i__21 < |nodes| ==> nodes[i__21].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, i__21, |nodes| - 1)) && (none < frac_val(P) && frac_val(P) < write && |nodes| == 2)
+  // assert
+  assert false
+  inhale false
+}
+
+method C_lemmaTotal2_EncodedGlobalVariables_Sequence$Node$_Fraction(diz: Ref, globals: Ref, nodes: Seq[Ref], P: frac)
+  requires diz != null
+  requires (forall i: Int :: { nodes[i].Node_total } 0 <= i && i < |nodes| ==> acc(nodes[i].Node_total, frac_val(P)))
+  requires (forall i: Int :: { nodes[i].Node_v } 0 <= i && i < |nodes| ==> acc(nodes[i].Node_v, frac_val(P)))
+  requires (forall i: Int :: { nodes[i].Node_total } 0 <= i && i < |nodes| ==> nodes[i].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, i, |nodes| - 1))
+  requires none < frac_val(P) && frac_val(P) < write
+  requires |nodes| == 2
+  ensures (forall i: Int :: { nodes[i].Node_total } 0 <= i && i < |nodes| ==> acc(nodes[i].Node_total, frac_val(P)))
+  ensures (forall i: Int :: { nodes[i].Node_v } 0 <= i && i < |nodes| ==> acc(nodes[i].Node_v, frac_val(P)))
+  ensures (forall i: Int :: { nodes[i].Node_total } 0 <= i && i < |nodes| ==> nodes[i].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, i, |nodes| - 1))
+  ensures none < frac_val(P) && frac_val(P) < write
+  ensures (forall i: Int :: { nodes[i] } 0 <= i && i < |nodes| ==> nodes[0].Node_total == nodes[i].Node_total)
+{
+  // assert
+  assert nodes[0].Node_total == nodes[0].Node_v + C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, 1, |nodes| - 1 - 1)
+  // assert
+  assert nodes[0].Node_total == nodes[0].Node_v + nodes[1].Node_v
+  // assert
+  assert nodes[1].Node_total == nodes[1].Node_v + C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, 0, |nodes| - 1 - 1)
+  // assert
+  assert nodes[1].Node_total == nodes[1].Node_v + nodes[0].Node_v
+}
+
+method C___contract_unsatisfiable__lemmaTotal_EncodedGlobalVariables_Sequence$Node$_Fraction(diz: Ref, globals: Ref, nodes: Seq[Ref], P: frac)
+  requires diz != null
+{
+  inhale (forall i__22: Int :: { nodes[i__22].Node_total } 0 <= i__22 && i__22 < |nodes| ==> acc(nodes[i__22].Node_total, frac_val(P))) && (forall i__23: Int :: { nodes[i__23].Node_v } 0 <= i__23 && i__23 < |nodes| ==> acc(nodes[i__23].Node_v, frac_val(P))) && (forall i__24: Int :: { nodes[i__24].Node_total } 0 <= i__24 && i__24 < |nodes| ==> nodes[i__24].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, i__24, |nodes| - 1)) && (none < frac_val(P) && frac_val(P) < write)
+  // assert
+  assert false
+  inhale false
+}
+
+method C_lemmaTotal_EncodedGlobalVariables_Sequence$Node$_Fraction(diz: Ref, globals: Ref, nodes: Seq[Ref], P: frac)
+  requires diz != null
+  requires (forall i: Int :: { nodes[i].Node_total } 0 <= i && i < |nodes| ==> acc(nodes[i].Node_total, frac_val(P)))
+  requires (forall i: Int :: { nodes[i].Node_v } 0 <= i && i < |nodes| ==> acc(nodes[i].Node_v, frac_val(P)))
+  requires (forall i: Int :: { nodes[i].Node_total } 0 <= i && i < |nodes| ==> nodes[i].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, i, |nodes| - 1))
+  requires none < frac_val(P) && frac_val(P) < write
+  ensures (forall i: Int :: { nodes[i].Node_total } 0 <= i && i < |nodes| ==> acc(nodes[i].Node_total, frac_val(P)))
+  ensures (forall i: Int :: { nodes[i].Node_v } 0 <= i && i < |nodes| ==> acc(nodes[i].Node_v, frac_val(P)))
+  ensures (forall i: Int :: { nodes[i].Node_total } 0 <= i && i < |nodes| ==> nodes[i].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, i, |nodes| - 1))
+  ensures none < frac_val(P) && frac_val(P) < write
+  ensures (forall i: Int :: { nodes[i] } 0 <= i && i < |nodes| ==> nodes[0].Node_total == nodes[i].Node_total)
+{
+  var i__26: Int
+  var __flatten_26__25: Int
+  if (|nodes| < 2) {
+    
+  } elseif (|nodes| == 2) {
+    C_lemmaTotal2_EncodedGlobalVariables_Sequence$Node$_Fraction(diz, globals, nodes, new_frac(frac_val(P) / 2))
+  } else {
+    i__26 := 1
+    while (i__26 < |nodes|)
+      invariant (forall i__27: Int :: { nodes[i__27].Node_total } 0 <= i__27 && i__27 < |nodes| ==> acc(nodes[i__27].Node_total, frac_val(P)))
+      invariant (forall i__28: Int :: { nodes[i__28].Node_v } 0 <= i__28 && i__28 < |nodes| ==> acc(nodes[i__28].Node_v, frac_val(P)))
+      invariant (forall i__29: Int :: { nodes[i__29].Node_total } 0 <= i__29 && i__29 < |nodes| ==> nodes[i__29].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, i__29, |nodes| - 1))
+      invariant 1 <= i__26 && i__26 <= |nodes|
+      invariant (forall j__30: Int :: { nodes[j__30].Node_total } 0 <= j__30 && j__30 < i__26 ==> nodes[0].Node_total == nodes[j__30].Node_total) 
+    {
+      C_lemmaTotalAB_EncodedGlobalVariables_Sequence$Node$_Integer_Integer_Fraction(diz, globals, nodes, i__26 - 1, i__26, new_frac(frac_val(P) / 2))
+      __flatten_26__25 := i__26
+      i__26 := i__26 + 1
+    }
+  }
+}
+
+method C_transmuteOutMessages_EncodedGlobalVariables_Sequence$Node$(diz: Ref, globals: Ref, nodes: Seq[Ref])
+  requires diz != null
+  requires (forall i: Int :: 0 <= i && i < |nodes| ==> acc(nodes[C_next_Integer_Integer(i, |nodes|)].Node_outMessage, 1 / 2))
+  ensures (forall i: Int :: { nodes[i].Node_outMessage } 0 <= i && i < |nodes| ==> acc(nodes[i].Node_outMessage, 1 / 2))
+{
+  inhale false
+}
+
+method C___contract_unsatisfiable__main_EncodedGlobalVariables_Sequence$Node$(diz: Ref, globals: Ref, nodes: Seq[Ref])
+  requires diz != null
+{
+  inhale true && (1 <= |nodes| && ((forall j__31: Int :: { nodes[j__31] } 0 <= j__31 && j__31 < |nodes| ==> acc(nodes[j__31].Node_v, 1 / 2)) && (forall j__32: Int :: { nodes[j__32] } 0 <= j__32 && j__32 < |nodes| ==> acc(nodes[j__32].Node_outMessage, write)) && (forall j__33: Int :: { nodes[j__33] } 0 <= j__33 && j__33 < |nodes| ==> acc(nodes[j__33].Node_inMessage, write)) && (forall j__34: Int :: { nodes[j__34] } 0 <= j__34 && j__34 < |nodes| ==> acc(nodes[j__34].Node_n, write)) && (forall j__35: Int :: { nodes[j__35] } 0 <= j__35 && j__35 < |nodes| ==> acc(nodes[j__35].Node_total, write))) && (forall j__36: Int :: { nodes[j__36] } 0 <= j__36 && j__36 < |nodes| ==> nodes[j__36].Node_n == 0) && (forall j__37: Int :: { nodes[j__37] } 0 <= j__37 && j__37 < |nodes| ==> nodes[j__37].Node_total == nodes[j__37].Node_v) && (forall j__38: Int :: { nodes[j__38] } 0 <= j__38 && j__38 < |nodes| ==> nodes[j__38].Node_inMessage == -1) && (forall j__39: Int :: { nodes[j__39] } 0 <= j__39 && j__39 < |nodes| ==> nodes[j__39].Node_outMessage == nodes[j__39].Node_v))
+  // assert
+  assert false
+  inhale false
+}
+
+method C_loop_body_90_Sequence$Node$_Integer(diz: Ref, nodes: Seq[Ref], tid: Int)
+  requires diz != null
+  requires 0 <= tid && tid < |nodes|
+  requires 1 <= |nodes|
+  requires acc(nodes[tid].Node_inMessage, write)
+  requires acc(nodes[C_next_Integer_Integer(tid, |nodes|)].Node_outMessage, write)
+  ensures 0 <= tid && tid < |nodes|
+  ensures 1 <= |nodes|
+  ensures acc(nodes[tid].Node_inMessage, write)
+  ensures acc(nodes[C_next_Integer_Integer(tid, |nodes|)].Node_outMessage, write)
+  ensures nodes[C_next_Integer_Integer(tid, |nodes|)].Node_outMessage == old(nodes[C_next_Integer_Integer(tid, |nodes|)].Node_outMessage)
+  ensures nodes[tid].Node_inMessage == nodes[C_next_Integer_Integer(tid, |nodes|)].Node_outMessage
+{
+  var __flatten_27__40: Ref
+  var __flatten_28__41: Int
+  var __flatten_29__42: Ref
+  var __flatten_30__43: Int
+  __flatten_27__40 := nodes[tid]
+  __flatten_30__43 := C_next_Integer_Integer(tid, |nodes|)
+  __flatten_29__42 := nodes[__flatten_30__43]
+  __flatten_28__41 := __flatten_29__42.Node_outMessage
+  __flatten_27__40.Node_inMessage := __flatten_28__41
+}
+
+method C_parrallel_region_main_1_Sequence$Node$(diz: Ref, nodes: Seq[Ref])
+  requires diz != null
+  requires 0 < |nodes| ==> 1 <= |nodes|
+  requires (forall tid: Int :: { nodes[tid].Node_inMessage } 0 <= tid && tid < |nodes| ==> acc(nodes[tid].Node_inMessage, write))
+  requires (forall tid: Int :: 0 <= tid && tid < |nodes| ==> acc(nodes[C_next_Integer_Integer(tid, |nodes|)].Node_outMessage, write))
+  ensures 0 < |nodes| ==> 1 <= |nodes|
+  ensures (forall tid: Int :: { nodes[tid].Node_inMessage } 0 <= tid && tid < |nodes| ==> acc(nodes[tid].Node_inMessage, write))
+  ensures (forall tid: Int :: 0 <= tid && tid < |nodes| ==> acc(nodes[C_next_Integer_Integer(tid, |nodes|)].Node_outMessage, write))
+  ensures (forall tid: Int :: 0 <= tid && tid < |nodes| ==> nodes[C_next_Integer_Integer(tid, |nodes|)].Node_outMessage == old(nodes[C_next_Integer_Integer(tid, |nodes|)].Node_outMessage))
+  ensures (forall tid: Int :: { nodes[tid].Node_inMessage } 0 <= tid && tid < |nodes| ==> nodes[tid].Node_inMessage == nodes[C_next_Integer_Integer(tid, |nodes|)].Node_outMessage)
+{
+  inhale false
+}
+
+method C_loop_body_93_Sequence$Node$_Integer_EncodedGlobalVariables(diz: Ref, nodes: Seq[Ref], tid: Int, globals: Ref)
+  requires diz != null
+  requires 0 <= tid && tid < |nodes|
+  requires 1 <= |nodes|
+  requires (forall j: Int :: { nodes[j] } 0 <= j && j < |nodes| ==> acc(nodes[j].Node_v, 1 / (|nodes| * 2)))
+  requires acc(nodes[tid].Node_inMessage, write)
+  requires acc(nodes[tid].Node_outMessage, write)
+  requires acc(nodes[tid].Node_n, write)
+  requires acc(nodes[tid].Node_total, write)
+  requires 0 <= nodes[tid].Node_n && nodes[tid].Node_n < |nodes|
+  requires nodes[tid].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, tid, nodes[tid].Node_n)
+  requires nodes[tid].Node_inMessage == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, C_next_Integer_Integer(tid, |nodes|), nodes[tid].Node_n)
+  ensures 0 <= tid && tid < |nodes|
+  ensures 1 <= |nodes|
+  ensures (forall j: Int :: { nodes[j] } 0 <= j && j < |nodes| ==> acc(nodes[j].Node_v, 1 / (|nodes| * 2)))
+  ensures acc(nodes[tid].Node_inMessage, write)
+  ensures acc(nodes[tid].Node_outMessage, write)
+  ensures acc(nodes[tid].Node_n, write)
+  ensures acc(nodes[tid].Node_total, write)
+  ensures nodes[tid].Node_n == old(nodes[tid].Node_n) + 1
+  ensures nodes[tid].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, tid, nodes[tid].Node_n)
+  ensures nodes[tid].Node_total == nodes[tid].Node_outMessage
+{
+  var __flatten_31__44: Bool
+  __flatten_31__44 := Node_processMessage_EncodedGlobalVariables_Fraction(nodes[tid], globals, new_frac(1 / (|nodes| * 2 * 2)))
+}
+
+method C_parrallel_region_main_2_Sequence$Node$_EncodedGlobalVariables(diz: Ref, nodes: Seq[Ref], globals: Ref)
+  requires diz != null
+  requires 0 < |nodes| ==> 1 <= |nodes|
+  requires 0 < |nodes| ==> (forall j: Int :: { nodes[j] } 0 <= j && j < |nodes| ==> acc(nodes[j].Node_v, |nodes| * (1 / (|nodes| * 2))))
+  requires (forall tid: Int :: { nodes[tid] } 0 <= tid && tid < |nodes| ==> acc(nodes[tid].Node_inMessage, write))
+  requires (forall tid: Int :: { nodes[tid] } 0 <= tid && tid < |nodes| ==> acc(nodes[tid].Node_outMessage, write))
+  requires (forall tid: Int :: { nodes[tid] } 0 <= tid && tid < |nodes| ==> acc(nodes[tid].Node_n, write))
+  requires (forall tid: Int :: { nodes[tid] } 0 <= tid && tid < |nodes| ==> acc(nodes[tid].Node_total, write))
+  requires (forall tid: Int :: { nodes[tid] } 0 <= tid && tid < |nodes| ==> 0 <= nodes[tid].Node_n && nodes[tid].Node_n < |nodes|)
+  requires (forall tid: Int :: { nodes[tid] } 0 <= tid && tid < |nodes| ==> nodes[tid].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, tid, nodes[tid].Node_n))
+  requires (forall tid: Int :: { nodes[tid] } 0 <= tid && tid < |nodes| ==> nodes[tid].Node_inMessage == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, C_next_Integer_Integer(tid, |nodes|), nodes[tid].Node_n))
+  ensures 0 < |nodes| ==> 1 <= |nodes|
+  ensures 0 < |nodes| ==> (forall j: Int :: { nodes[j] } 0 <= j && j < |nodes| ==> acc(nodes[j].Node_v, |nodes| * (1 / (|nodes| * 2))))
+  ensures (forall tid: Int :: { nodes[tid] } 0 <= tid && tid < |nodes| ==> acc(nodes[tid].Node_inMessage, write))
+  ensures (forall tid: Int :: { nodes[tid] } 0 <= tid && tid < |nodes| ==> acc(nodes[tid].Node_outMessage, write))
+  ensures (forall tid: Int :: { nodes[tid] } 0 <= tid && tid < |nodes| ==> acc(nodes[tid].Node_n, write))
+  ensures (forall tid: Int :: { nodes[tid] } 0 <= tid && tid < |nodes| ==> acc(nodes[tid].Node_total, write))
+  ensures (forall tid: Int :: { nodes[tid] } 0 <= tid && tid < |nodes| ==> nodes[tid].Node_n == old(nodes[tid].Node_n) + 1)
+  ensures (forall tid: Int :: { nodes[tid] } 0 <= tid && tid < |nodes| ==> nodes[tid].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, tid, nodes[tid].Node_n))
+  ensures (forall tid: Int :: { nodes[tid] } 0 <= tid && tid < |nodes| ==> nodes[tid].Node_total == nodes[tid].Node_outMessage)
+{
+  inhale false
+}
+
+method C_main_EncodedGlobalVariables_Sequence$Node$(diz: Ref, globals: Ref, nodes: Seq[Ref])
+  requires diz != null
+  requires 1 <= |nodes|
+  requires (forall j: Int :: { nodes[j] } 0 <= j && j < |nodes| ==> acc(nodes[j].Node_v, 1 / 2))
+  requires (forall j: Int :: { nodes[j] } 0 <= j && j < |nodes| ==> acc(nodes[j].Node_outMessage, write))
+  requires (forall j: Int :: { nodes[j] } 0 <= j && j < |nodes| ==> acc(nodes[j].Node_inMessage, write))
+  requires (forall j: Int :: { nodes[j] } 0 <= j && j < |nodes| ==> acc(nodes[j].Node_n, write))
+  requires (forall j: Int :: { nodes[j] } 0 <= j && j < |nodes| ==> acc(nodes[j].Node_total, write))
+  requires (forall j: Int :: { nodes[j] } 0 <= j && j < |nodes| ==> nodes[j].Node_n == 0)
+  requires (forall j: Int :: { nodes[j] } 0 <= j && j < |nodes| ==> nodes[j].Node_total == nodes[j].Node_v)
+  requires (forall j: Int :: { nodes[j] } 0 <= j && j < |nodes| ==> nodes[j].Node_inMessage == -1)
+  requires (forall j: Int :: { nodes[j] } 0 <= j && j < |nodes| ==> nodes[j].Node_outMessage == nodes[j].Node_v)
+  ensures 1 <= |nodes|
+  ensures (forall j: Int :: { nodes[j] } 0 <= j && j < |nodes| ==> acc(nodes[j].Node_v, 1 / 2))
+  ensures (forall j: Int :: { nodes[j] } 0 <= j && j < |nodes| ==> acc(nodes[j].Node_outMessage, write))
+  ensures (forall j: Int :: { nodes[j] } 0 <= j && j < |nodes| ==> acc(nodes[j].Node_inMessage, write))
+  ensures (forall j: Int :: { nodes[j] } 0 <= j && j < |nodes| ==> acc(nodes[j].Node_n, write))
+  ensures (forall j: Int :: { nodes[j] } 0 <= j && j < |nodes| ==> acc(nodes[j].Node_total, write))
+{
+  // assert
+  assert (forall j__45: Int :: { nodes[j__45] } 0 <= j__45 && j__45 < |nodes| ==> nodes[j__45].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, j__45, nodes[j__45].Node_n))
+  while ((forall j__46: Int :: { nodes[j__46] } 0 <= j__46 && j__46 < |nodes| ==> nodes[j__46].Node_n < |nodes| - 1))
+    invariant 1 <= |nodes|
+    invariant (forall j__47: Int :: { nodes[j__47] } 0 <= j__47 && j__47 < |nodes| ==> acc(nodes[j__47].Node_v, 1 / 2))
+    invariant (forall j__48: Int :: { nodes[j__48] } 0 <= j__48 && j__48 < |nodes| ==> acc(nodes[j__48].Node_outMessage, write))
+    invariant (forall j__49: Int :: { nodes[j__49] } 0 <= j__49 && j__49 < |nodes| ==> acc(nodes[j__49].Node_inMessage, write))
+    invariant (forall j__50: Int :: { nodes[j__50] } 0 <= j__50 && j__50 < |nodes| ==> acc(nodes[j__50].Node_n, write))
+    invariant (forall j__51: Int :: { nodes[j__51] } 0 <= j__51 && j__51 < |nodes| ==> acc(nodes[j__51].Node_total, write))
+    invariant (forall j__52: Int :: { nodes[j__52] } 0 <= j__52 && j__52 < |nodes| ==> 0 <= nodes[j__52].Node_n) && (forall j__53: Int :: { nodes[j__53] } 0 <= j__53 && j__53 < |nodes| ==> nodes[j__53].Node_n <= |nodes| - 1)
+    invariant (forall j__54: Int, k__55: Int :: { nodes[k__55],nodes[j__54] } 0 <= j__54 && j__54 < |nodes| && (0 <= k__55 && k__55 < |nodes|) ==> nodes[j__54].Node_n == nodes[k__55].Node_n)
+    invariant (forall j__56: Int :: { nodes[j__56] } 0 <= j__56 && j__56 < |nodes| ==> nodes[j__56].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, j__56, nodes[j__56].Node_n))
+    invariant (forall j__57: Int :: { nodes[j__57] } 0 <= j__57 && j__57 < |nodes| ==> nodes[j__57].Node_total == nodes[j__57].Node_outMessage) 
+  {
+    C_parrallel_region_main_1_Sequence$Node$(diz, nodes)
+    // assert
+    assert (forall i__58: Int :: 0 <= i__58 && i__58 < |nodes| ==> acc(nodes[C_next_Integer_Integer(i__58, |nodes|)].Node_outMessage, write))
+    C_transmuteOutMessages_EncodedGlobalVariables_Sequence$Node$(diz, globals, nodes)
+    C_transmuteOutMessages_EncodedGlobalVariables_Sequence$Node$(diz, globals, nodes)
+    // assert
+    assert (forall i__59: Int :: { nodes[i__59] } 0 <= i__59 && i__59 < |nodes| ==> acc(nodes[i__59].Node_outMessage, write))
+    C_parrallel_region_main_2_Sequence$Node$_EncodedGlobalVariables(diz, nodes, globals)
+    // assert
+    assert nodes[0].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, 0, nodes[0].Node_n)
+    if (1 < |nodes|) {
+      // assert
+      assert nodes[1].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, 1, nodes[1].Node_n)
+    }
+    if (2 < |nodes|) {
+      // assert
+      assert nodes[2].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, 2, nodes[2].Node_n)
+    }
+  }
+  // assert
+  assert (forall j__60: Int :: { nodes[j__60] } 0 <= j__60 && j__60 < |nodes| ==> nodes[j__60].Node_n == |nodes| - 1)
+  // assert
+  assert nodes[0].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, 0, |nodes| - 1)
+  C_lemmaTotal_EncodedGlobalVariables_Sequence$Node$_Fraction(diz, globals, nodes, new_frac(1 / 4))
+  if (1 < |nodes|) {
+    // assert
+    assert nodes[0].Node_total == nodes[1].Node_total
+  }
+  if (2 < |nodes|) {
+    // assert
+    assert nodes[0].Node_total == nodes[2].Node_total
+  }
+  // assert
+  assert (forall j__61: Int :: { nodes[j__61] } 0 <= j__61 && j__61 < |nodes| ==> nodes[j__61].Node_total == C_getTotal_EncodedGlobalVariables_Sequence$Node$_Integer_Integer(globals, nodes, 0, |nodes| - 1))
+}
