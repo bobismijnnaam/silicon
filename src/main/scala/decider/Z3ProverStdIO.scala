@@ -275,6 +275,7 @@ class Z3ProverStdIO(uniqueId: String,
       case "sat" => Sat
       case "unsat" => Unsat
       case "unknown" => Unknown
+      case "unsupported" => println("Got unsupported"); Unknown
     }
   }
 
