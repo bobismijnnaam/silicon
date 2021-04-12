@@ -59,6 +59,9 @@
 (define-fun $Math.clip ((a Int)) Int
     (ite (< a 0) 0 a))
 
+(define-fun implies ((a Bool) (b Bool)) Bool
+    (ite a (= b true) true))
+
 ; --- End static preamble ---
 
 ; (get-proof "stdout")
