@@ -374,7 +374,9 @@ class Z3ProverStdIO(uniqueId: String,
     case "unknown" => false
     case "success" => readUnsat()
     case result =>
-      throw Z3InteractionFailed(uniqueId, s"Unexpected output of Z3 while trying to refute an assertion: $result")
+//      throw Z3InteractionFailed(uniqueId, s"Unexpected output of Z3 while trying to refute an assertion: $result")
+      println(s"Unexpected output of Z3 while trying to refute an assertion: $result")
+      false
   }
 
   private def readModel(separator: String): String = {
